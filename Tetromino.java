@@ -1,10 +1,9 @@
 /**
  * Jazmin I. Paz
  * Homework 1
- * 18 June 2019
+ * 19 June 2019
  * CS3331 Advanced Object-Oriented Programming
  */
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -16,82 +15,86 @@ import java.util.Random;
  *
  */
 public class Tetromino{
-    public int a=0,b=0;
-    protected int[][] tetromino;
-    protected int[][] t = new int[4][4];
+    public static int a=0,b=2,c=0;
+    //protected int[][] tetromino;
+    protected int[][][] t = new int[20][10][4];
     Tetromino(){
 
     }
 
     /**
      * This method is in charge of generating a random tetromino
+     * including each of its rotations
      * and returning an array with its coordinates
      * @return
      */
-    public int[][] get_tetromino(TetrominoEnum random) {
+    public int[][][] get_tetromino(TetrominoEnum random) {
         switch(random) {
             case O:
                 //Creating O
-                System.out.println("Random tetromino: O");
-                //t = new int[][] {{a,b},{a,b+1},{a+1,b},{a+1,b+1}};
-                t[a][b] = 1;t[a][b+1] = 1;t[a][b+2] = 0;t[a][b+3] = 0;t[a+1][b] = 1;t[a+1][b+1] = 1;t[a+1][b+2] = 0;t[a+1][b+3] = 0;t[a+2][b] = 0;t[a+2][b+1] = 0;t[a+2][b+2] = 0;t[a+2][b+3] = 0;t[a+3][b] = 0;t[a+3][b+1] = 0;t[a+3][b+2] = 0;t[a+3][b+3] = 0;
-                System.out.println("1Val of B:"+b);
+                t[a][b][0] = 1;t[a][b+1][0] = 1;t[a+1][b][0] = 1;t[a+1][b+1][0] = 1;t[a][b][1] = 1;t[a][b+1][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a+1][b][2] = 1;t[a+1][b+1][2] = 1;t[a][b][3] = 1;t[a][b+1][3] = 1;t[a+1][b][3] = 1;t[a+1][b+1][3] = 1;
                 break;
 
             case I:
                 //Creating I
-                System.out.println("Random tetromino: I");
-                //t = new int[][] {{a,b},{a,b+1},{a,b+2},{a,b+3}};
-                t[a][b] = 1;t[a][b+1] = 1;t[a][b+2] = 1;t[a][b+3] = 1;t[a+1][b] = 0;t[a+1][b+1] = 0;t[a+1][b+2] = 0;t[a+1][b+3] = 0;t[a+2][b] = 0;t[a+2][b+1] = 0;t[a+2][b+2] = 0;t[a+2][b+3] = 0;t[a+3][b] = 0;t[a+3][b+1] = 0;t[a+3][b+2] = 0;t[a+3][b+3] = 0;
+                t[a][b][0] = 1;t[a][b+1][0] = 1;t[a][b+2][0] = 1;t[a][b+3][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a+2][b][1] = 1;t[a+3][b][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a][b+2][2] = 1;t[a][b+3][2] = 1;t[a][b][3] = 1;t[a][b+1][3] = 1;t[a][b+2][3] = 1;t[a][b+3][3] = 1;
                 break;
 
             case L:
                 //Creating L
-                System.out.println("Random tetromino: L");
-                //t = new int[][] {{a,b},{a+1,b},{a+2,b},{a+2,b+1}};
-                t[a][b] = 1;t[a][b+1] = 0;t[a][b+2] = 0;t[a][b+3] = 0;t[a+1][b] = 1;t[a+1][b+1] = 0;t[a+1][b+2] = 0;t[a+1][b+3] = 0;t[a+2][b] = 1;t[a+2][b+1] = 1;t[a+2][b+2] = 0;t[a+2][b+3] = 0;t[a+3][b] = 0;t[a+3][b+1] = 0;t[a+3][b+2] = 0;t[a+3][b+3] = 0;
+                t[a][b][0] = 1;t[a+1][b][0] = 1;t[a+2][b][0] = 1;t[a+2][b+1][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a][b+1][1] = 1;t[a][b+2][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a+1][b+1][2] = 1;t[a+2][b+1][2] = 1;t[a+1][b][3] = 2;t[a+1][b+1][3] = 2;t[a+1][b+2][3] = 1;t[a][b+2][3] = 1;
+               
                 break;
             case J:
                 //Creating J
-                System.out.println("Random tetromino: J");
-                //t = new int[][] {{a,b+1},{a+1,b+1},{a+2,b+1},{a+2,b}};
-                t[a][b] = 0;t[a][b+1] = 1;t[a][b+2] = 0;t[a][b+3] = 0;t[a+1][b] = 0;t[a+1][b+1] = 1;t[a+1][b+2] = 0;t[a+1][b+3] = 0;t[a+2][b] = 1;t[a+2][b+1] = 1;t[a+2][b+2] = 0;t[a+2][b+3] = 0;t[a+3][b] = 0;t[a+3][b+1] = 0;t[a+3][b+2] = 0;t[a+3][b+3] = 0;
+                t[a][b+1][0] = 1;t[a+1][b+1][0] = 1;t[a+2][b][0] = 1;t[a+2][b+1][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a+1][b+2][1] = 1;t[a][b][2] = 1;t[a+1][b][2] = 1;t[a+2][b][2] = 1;t[a][b+1][2] = 1;t[a][b][3] = 1;t[a][b+1][3] = 1;t[a][b+2][3] = 1;t[a+1][b+2][3] = 1;
+                
                 break;
             case T:
                 //Creating T
-                System.out.println("Random tetromino: T");
-                //t = new int[][] {{a,b+1},{a+1,b},{a+1,b+1},{a+1,b+2}};
-                t[a][b] = 0;t[a][b+1] = 1;t[a][b+2] = 0;t[a][b+3] = 0;t[a+1][b] = 1;t[a+1][b+1] = 1;t[a+1][b+2] = 1;t[a+1][b+3] = 0;t[a+2][b] = 0;t[a+2][b+1] = 0;t[a+2][b+2] = 0;t[a+2][b+3] = 0;t[a+3][b] = 0;t[a+3][b+1] = 0;t[a+3][b+2] = 0;t[a+3][b+3] = 0;
+                t[a][b+1][0] = 1;t[a+1][b][0] = 1;t[a+1][b+1][0] = 1;t[a+1][b+2][0] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a][b+1][1] = 1;t[a+2][b+1][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a][b+2][2] = 1;t[a+1][b+1][2] = 1;t[a][b][3] = 1;t[a+1][b][3] = 1;t[a+2][b][3] = 1;t[a+1][b+1][3] = 1;
                 break;
             case S:
                 //Creating S
-                System.out.println("Random tetromino: S");
-                //t = new int[][] {{a+1,b},{a,b+1},{a+1,b+1},{a,b+2}};
-                t[a][b] = 0;t[a][b+1] = 1;t[a][b+2] = 1;t[a][b+3] = 0;t[a+1][b] = 1;t[a+1][b+1] = 1;t[a+1][b+2] = 0;t[a+1][b+3] = 0;t[a+2][b] = 0;t[a+2][b+1] = 0;t[a+2][b+2] = 0;t[a+2][b+3] = 0;t[a+3][b] = 0;t[a+3][b+1] = 0;t[a+3][b+2] = 0;t[a+3][b+3] = 0;
+                t[a][b+1][0] = 1;t[a][b+2][0] = 1;t[a+1][b][0] = 1;t[a+1][b+1][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a+2][b+1][1] = 1;t[a][b+1][2] = 1;t[a][b+2][2] = 1;t[a+1][b][2] = 1;t[a+1][b+1][2] = 1;t[a][b][3] = 1;t[a+1][b][3] = 1;t[a+1][b+1][3] = 1;t[a+2][b+1][3] = 1;
                 break;
             case Z:
                 //Creating Z
-                System.out.println("Random tetromino: Z");
-                //t = new int[][] {{a,b}, {a,b+1}, {a+1,b+1}, {a+1,b+2}};
-                t[a][b] = 1;t[a][b+1] = 1;t[a][b+2] = 0;t[a][b+3] = 0;t[a+1][b] = 0;t[a+1][b+1] = 1;t[a+1][b+2] = 1;t[a+1][b+3] = 0;t[a+2][b] = 0;t[a+2][b+1] = 0;t[a+2][b+2] = 0;t[a+2][b+3] = 0;t[a+3][b] = 0;t[a+3][b+1] = 0;t[a+3][b+2] = 0;t[a+3][b+3] = 0;
-                System.out.println();
+                t[a][b][0] = 1;t[a][b+1][0] = 1;t[a+1][b+1][0] = 1;t[a+1][b+2][0] = 1;t[a][b+1][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a+2][b][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a+1][b+1][2] = 1;t[a+1][b+2][2] = 1;t[a][b+1][3] = 1;t[a+1][b][3] = 1;t[a+1][b+1][3] = 1;t[a+2][b][3] = 1;
     		    break;
+    		default:
+    			break;
         }
         return t;
     }
+    /**
+     * Clears the tetromino shape and reinitializes every element
+     * in array to 0 for re-use
+     */
+    public void clear_t() {
+    	t = new int[20][10][4];
+    }
+    	
     /**
      * Rotates tetromino to the right.
      */
     public void rotateRight()
     {
-        //your code goes here
+    	c++;
+    	if (c==4){
+    		c=0;
+    	}
     }
+    
     /**
      * Rotates tetromino to the left.
      */
     public void rotateLeft()
     {
-        //your code goes here
+    	c--;
+    	if (c==4){
+    		c=0;
+    	}
     }
 
     /**

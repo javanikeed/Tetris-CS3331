@@ -1,7 +1,7 @@
 /**
  * Jazmin I. Paz
  * Homework 1
- * 18 June 2019
+ * 19 June 2019
  * CS3331 Advanced Object-Oriented Programming
  */
 public class Board extends java.util.Observable{
@@ -9,7 +9,7 @@ public class Board extends java.util.Observable{
     private int level;
     private int score;
     private boolean isGameActive;
-    protected static int[][] board;
+    protected int[][] board;
     Tetromino tetromino = new Tetromino();
     public Board()
     {
@@ -19,21 +19,25 @@ public class Board extends java.util.Observable{
      * Initializes board at the beginning of the game
      * by creating the data structure necessary.
      * */
-    public static void board_init(){
+    public void board_init(){
         board = new int[20][10];
     }
-    public static void place_tetromino(int[][] t){
-        for(int i=0;i<4;i++){
-            for(int j=0; j<4;j++){
-                board[i][j] = t[i][j];
+    
+    public void place_tetromino(int[][][] t , int val){
+        for(int i=0;i<t.length;i++){
+            for(int j=0; j<t[i].length;j++){
+            	for(int k=0;k<4;k++) {
+            		board[i][j] = t[i][j][val]; 
+            	}
+            		   
             }
         }
     }
-
+    
     /**
      * This method prints the tetris board; supports updating.
      */
-    public static void print_board(){
+    public void print_board(){
         for(int j=0;j<20;j++){
             System.out.println("+---+---+---+---+---+---+---+---+---+---+");
             for(int k=0;k<10;k++){
@@ -76,24 +80,41 @@ public class Board extends java.util.Observable{
      */
     public void moveTetrominoDown()
     {
-        tetromino.b++;
-        System.out.println("2Val of B: "+tetromino.b);
+        Tetromino.a += 1;
+        
     }
     public void moveTetrominoRight()
     {
-        //your code goes here
+    	while(Tetromino.b<20) {
+    		 Tetromino.b +=1;
+    	}
+       
     }
     public void moveTetrominoLeft()
     {
-        //your code goes here
+    	while(Tetromino.b>-1) {
+   		 Tetromino.b -=1;
+    	}
     }
     /**
      * Returns if this is a valid position
-     * @return
+     * Still in very very basic state.. needs more work later.
      */
-    private boolean validateTetrominoPosition()
+    public boolean validateTetrominoPosition()
     {
-        //your code goes here
+        if(Tetromino.b<0) {
+        	System.out.println("Violating left boundary.");
+        	return false;
+        }
+        if(Tetromino.b>9) {
+        	System.out.println("Violating right boundary.");
+        	return false;
+        }
+        if (Tetromino.a>19) {
+        	System.out.println("Violating lower boundary.");
+        	return false;
+        }
+        System.out.println("Valid Tetromino position.");
         return true;
     }
 }
