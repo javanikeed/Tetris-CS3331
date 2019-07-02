@@ -11,7 +11,7 @@ public class Board extends java.util.Observable{
     private boolean isGameActive;
     protected int[][] board;
     Tetromino tetromino = new Tetromino();
-    public Board()
+    Board()
     {
 
     }
@@ -22,18 +22,18 @@ public class Board extends java.util.Observable{
     public void board_init(){
         board = new int[20][10];
     }
-    
+
     public void place_tetromino(int[][][] t , int val){
         for(int i=0;i<t.length;i++){
             for(int j=0; j<t[i].length;j++){
-            	for(int k=0;k<4;k++) {
-            		board[i][j] = t[i][j][val]; 
-            	}
-            		   
+                for(int k=0;k<4;k++) {
+                    board[i][j] = t[i][j][val];
+                }
+
             }
         }
     }
-    
+
     /**
      * This method prints the tetris board; supports updating.
      */
@@ -81,20 +81,20 @@ public class Board extends java.util.Observable{
     public void moveTetrominoDown()
     {
         Tetromino.a += 1;
-        
+
     }
     public void moveTetrominoRight()
     {
-    	while(Tetromino.b<20) {
-    		 Tetromino.b +=1;
-    	}
-       
+        while(Tetromino.b<20) {
+            Tetromino.b +=1;
+        }
+
     }
     public void moveTetrominoLeft()
     {
-    	while(Tetromino.b>-1) {
-   		 Tetromino.b -=1;
-    	}
+        while(Tetromino.b>-1) {
+            Tetromino.b -=1;
+        }
     }
     /**
      * Returns if this is a valid position
@@ -103,16 +103,16 @@ public class Board extends java.util.Observable{
     public boolean validateTetrominoPosition()
     {
         if(Tetromino.b<0) {
-        	System.out.println("Violating left boundary.");
-        	return false;
+            System.out.println("Violating left boundary.");
+            return false;
         }
         if(Tetromino.b>9) {
-        	System.out.println("Violating right boundary.");
-        	return false;
+            System.out.println("Violating right boundary.");
+            return false;
         }
         if (Tetromino.a>19) {
-        	System.out.println("Violating lower boundary.");
-        	return false;
+            System.out.println("Violating lower boundary.");
+            return false;
         }
         System.out.println("Valid Tetromino position.");
         return true;

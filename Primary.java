@@ -6,13 +6,13 @@
  */
 public class Primary {
     Primary(){
-   
+
     }
     public static void main(String[] args){
         Operations();
     }
     public static void Operations() {
-    	Board b = new Board();
+        Board b = new Board();
         Tetromino t = new Tetromino();
         b.board_init();
         System.out.println("Generating Random Tetromino...");
@@ -74,8 +74,7 @@ public class Primary {
         Tetromino.a = 7;
         Tetromino.b = 4;
         System.out.println(b.validateTetrominoPosition());
-        
-        
-    }   
-}
 
+
+    }
+}

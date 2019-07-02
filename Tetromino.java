@@ -43,12 +43,12 @@ public class Tetromino{
             case L:
                 //Creating L
                 t[a][b][0] = 1;t[a+1][b][0] = 1;t[a+2][b][0] = 1;t[a+2][b+1][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a][b+1][1] = 1;t[a][b+2][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a+1][b+1][2] = 1;t[a+2][b+1][2] = 1;t[a+1][b][3] = 2;t[a+1][b+1][3] = 2;t[a+1][b+2][3] = 1;t[a][b+2][3] = 1;
-               
+
                 break;
             case J:
                 //Creating J
                 t[a][b+1][0] = 1;t[a+1][b+1][0] = 1;t[a+2][b][0] = 1;t[a+2][b+1][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a+1][b+2][1] = 1;t[a][b][2] = 1;t[a+1][b][2] = 1;t[a+2][b][2] = 1;t[a][b+1][2] = 1;t[a][b][3] = 1;t[a][b+1][3] = 1;t[a][b+2][3] = 1;t[a+1][b+2][3] = 1;
-                
+
                 break;
             case T:
                 //Creating T
@@ -61,9 +61,9 @@ public class Tetromino{
             case Z:
                 //Creating Z
                 t[a][b][0] = 1;t[a][b+1][0] = 1;t[a+1][b+1][0] = 1;t[a+1][b+2][0] = 1;t[a][b+1][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a+2][b][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a+1][b+1][2] = 1;t[a+1][b+2][2] = 1;t[a][b+1][3] = 1;t[a+1][b][3] = 1;t[a+1][b+1][3] = 1;t[a+2][b][3] = 1;
-    		    break;
-    		default:
-    			break;
+                break;
+            default:
+                break;
         }
         return t;
     }
@@ -72,29 +72,29 @@ public class Tetromino{
      * in array to 0 for re-use
      */
     public void clear_t() {
-    	t = new int[20][10][4];
+        t = new int[20][10][4];
     }
-    	
+
     /**
      * Rotates tetromino to the right.
      */
     public void rotateRight()
     {
-    	c++;
-    	if (c==4){
-    		c=0;
-    	}
+        c++;
+        if (c==4){
+            c=0;
+        }
     }
-    
+
     /**
      * Rotates tetromino to the left.
      */
     public void rotateLeft()
     {
-    	c--;
-    	if (c==4){
-    		c=0;
-    	}
+        c--;
+        if (c==4){
+            c=0;
+        }
     }
 
     /**
