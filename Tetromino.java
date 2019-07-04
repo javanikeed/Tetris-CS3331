@@ -15,9 +15,8 @@ import java.util.Random;
  *
  */
 public class Tetromino{
-    public static int a=0,b=2,c=0;
-    //protected int[][] tetromino;
-    protected int[][][] t = new int[20][10][4];
+	
+    public static int a=25,b=25,c=0;
     Tetromino(){
 
     }
@@ -28,53 +27,63 @@ public class Tetromino{
      * and returning an array with its coordinates
      * @return
      */
-    public int[][][] get_tetromino(TetrominoEnum random) {
+    public int[] get_tetromino(TetrominoEnum random) {
+        int[] x = null;
         switch(random) {
             case O:
                 //Creating O
-                t[a][b][0] = 1;t[a][b+1][0] = 1;t[a+1][b][0] = 1;t[a+1][b+1][0] = 1;t[a][b][1] = 1;t[a][b+1][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a+1][b][2] = 1;t[a+1][b+1][2] = 1;t[a][b][3] = 1;t[a][b+1][3] = 1;t[a+1][b][3] = 1;t[a+1][b+1][3] = 1;
+            	x = new int[]{a,b,a,b+30,a+30,b,a+30,b+30};
+                //t[a][b][0] = 1;t[a][b+1][0] = 1;t[a+1][b][0] = 1;
+            	/*t[a+1][b+1][0] = 1;t[a][b][1] = 1;t[a][b+1][1] = 1;
+            	t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a][b][2] = 1;
+            	t[a][b+1][2] = 1;t[a+1][b][2] = 1;t[a+1][b+1][2] = 1;
+            	t[a][b][3] = 1;t[a][b+1][3] = 1;t[a+1][b][3] = 1;t[a+1][b+1][3] = 1; */
                 break;
 
             case I:
                 //Creating I
-                t[a][b][0] = 1;t[a][b+1][0] = 1;t[a][b+2][0] = 1;t[a][b+3][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a+2][b][1] = 1;t[a+3][b][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a][b+2][2] = 1;t[a][b+3][2] = 1;t[a][b][3] = 1;t[a][b+1][3] = 1;t[a][b+2][3] = 1;t[a][b+3][3] = 1;
+            	x = new int[]{a,b,a,b+30,a,b+60,a,b+90};
+                //t[a][b][0] = 1;t[a][b+1][0] = 1;t[a][b+2][0] = 1;t[a][b+3][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a+2][b][1] = 1;t[a+3][b][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a][b+2][2] = 1;t[a][b+3][2] = 1;t[a][b][3] = 1;t[a][b+1][3] = 1;t[a][b+2][3] = 1;t[a][b+3][3] = 1;
                 break;
 
             case L:
                 //Creating L
-                t[a][b][0] = 1;t[a+1][b][0] = 1;t[a+2][b][0] = 1;t[a+2][b+1][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a][b+1][1] = 1;t[a][b+2][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a+1][b+1][2] = 1;t[a+2][b+1][2] = 1;t[a+1][b][3] = 2;t[a+1][b+1][3] = 2;t[a+1][b+2][3] = 1;t[a][b+2][3] = 1;
+            	x = new int[]{a,b,a+30,b,a+60,b,a+60,b+30};
+                //t[a][b][0] = 1;t[a+1][b][0] = 1;t[a+2][b][0] = 1;t[a+2][b+1][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a][b+1][1] = 1;t[a][b+2][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a+1][b+1][2] = 1;t[a+2][b+1][2] = 1;t[a+1][b][3] = 2;t[a+1][b+1][3] = 2;t[a+1][b+2][3] = 1;t[a][b+2][3] = 1;
 
                 break;
             case J:
                 //Creating J
-                t[a][b+1][0] = 1;t[a+1][b+1][0] = 1;t[a+2][b][0] = 1;t[a+2][b+1][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a+1][b+2][1] = 1;t[a][b][2] = 1;t[a+1][b][2] = 1;t[a+2][b][2] = 1;t[a][b+1][2] = 1;t[a][b][3] = 1;t[a][b+1][3] = 1;t[a][b+2][3] = 1;t[a+1][b+2][3] = 1;
+            	x = new int[]{a,b+30,a+30,b+30,a+60,b,a+60,b+30};
+                //t[a][b+1][0] = 1;t[a+1][b+1][0] = 1;t[a+2][b][0] = 1;t[a+2][b+1][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a+1][b+2][1] = 1;t[a][b][2] = 1;t[a+1][b][2] = 1;t[a+2][b][2] = 1;t[a][b+1][2] = 1;t[a][b][3] = 1;t[a][b+1][3] = 1;t[a][b+2][3] = 1;t[a+1][b+2][3] = 1;
 
                 break;
             case T:
                 //Creating T
-                t[a][b+1][0] = 1;t[a+1][b][0] = 1;t[a+1][b+1][0] = 1;t[a+1][b+2][0] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a][b+1][1] = 1;t[a+2][b+1][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a][b+2][2] = 1;t[a+1][b+1][2] = 1;t[a][b][3] = 1;t[a+1][b][3] = 1;t[a+2][b][3] = 1;t[a+1][b+1][3] = 1;
+            	x = new int[]{a,b+30,a+30,b,a+30,b+30,a+30,b+60};
+                //t[a][b+1][0] = 1;t[a+1][b][0] = 1;t[a+1][b+1][0] = 1;t[a+1][b+2][0] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a][b+1][1] = 1;t[a+2][b+1][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a][b+2][2] = 1;t[a+1][b+1][2] = 1;t[a][b][3] = 1;t[a+1][b][3] = 1;t[a+2][b][3] = 1;t[a+1][b+1][3] = 1;
                 break;
             case S:
                 //Creating S
-                t[a][b+1][0] = 1;t[a][b+2][0] = 1;t[a+1][b][0] = 1;t[a+1][b+1][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a+2][b+1][1] = 1;t[a][b+1][2] = 1;t[a][b+2][2] = 1;t[a+1][b][2] = 1;t[a+1][b+1][2] = 1;t[a][b][3] = 1;t[a+1][b][3] = 1;t[a+1][b+1][3] = 1;t[a+2][b+1][3] = 1;
+            	x = new int[]{a,b+30,a,b+60,a+30,b,a+30,b+30};
+                //t[a][b+1][0] = 1;t[a][b+2][0] = 1;t[a+1][b][0] = 1;t[a+1][b+1][0] = 1;t[a][b][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a+2][b+1][1] = 1;t[a][b+1][2] = 1;t[a][b+2][2] = 1;t[a+1][b][2] = 1;t[a+1][b+1][2] = 1;t[a][b][3] = 1;t[a+1][b][3] = 1;t[a+1][b+1][3] = 1;t[a+2][b+1][3] = 1;
                 break;
             case Z:
                 //Creating Z
-                t[a][b][0] = 1;t[a][b+1][0] = 1;t[a+1][b+1][0] = 1;t[a+1][b+2][0] = 1;t[a][b+1][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a+2][b][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a+1][b+1][2] = 1;t[a+1][b+2][2] = 1;t[a][b+1][3] = 1;t[a+1][b][3] = 1;t[a+1][b+1][3] = 1;t[a+2][b][3] = 1;
+            	x = new int[]{a,b,a,b+30,a+30,b+30,a+30,b+60};
+                //t[a][b][0] = 1;t[a][b+1][0] = 1;t[a+1][b+1][0] = 1;t[a+1][b+2][0] = 1;t[a][b+1][1] = 1;t[a+1][b][1] = 1;t[a+1][b+1][1] = 1;t[a+2][b][1] = 1;t[a][b][2] = 1;t[a][b+1][2] = 1;t[a+1][b+1][2] = 1;t[a+1][b+2][2] = 1;t[a][b+1][3] = 1;t[a+1][b][3] = 1;t[a+1][b+1][3] = 1;t[a+2][b][3] = 1;
                 break;
             default:
                 break;
         }
-        return t;
+        return x;
     }
+
     /**
      * Clears the tetromino shape and reinitializes every element
      * in array to 0 for re-use
      */
-    public void clear_t() {
-        t = new int[20][10][4];
-    }
-
+    
     /**
      * Rotates tetromino to the right.
      */
@@ -85,7 +94,7 @@ public class Tetromino{
             c=0;
         }
     }
-
+    
     /**
      * Rotates tetromino to the left.
      */
@@ -97,6 +106,9 @@ public class Tetromino{
         }
     }
 
+    
+    
+    
     /**
      * Enumeration to list the different tetrominos.
      * FILLER used when in multiplayer sending a line to the other player.

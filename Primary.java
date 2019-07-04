@@ -10,6 +10,7 @@ public class Primary {
     }
     public static void main(String[] args){
         Operations();
+        
     }
     public static void Operations() {
         Board b = new Board();
@@ -17,7 +18,7 @@ public class Primary {
         b.board_init();
         System.out.println("Generating Random Tetromino...");
         Tetromino.TetrominoEnum val = Tetromino.TetrominoEnum.getRandomTetromino();
-        int[][][] rand_tetromino = t.get_tetromino(val);
+        int[][] rand_tetromino = t.get_tetromino(val);
         System.out.println("Placing "+val+" tetromino in default position...");
         b.place_tetromino(rand_tetromino, Tetromino.c);
         System.out.println("Printing board...");

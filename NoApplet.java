@@ -296,7 +296,7 @@ public class NoApplet extends DoubleBufferPanel {
         frame.addKeyListener(getKeyListener());
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle(getClass().getSimpleName());
+        frame.setTitle("Tetris");
         frame.setResizable(false);
         frame.setVisible(true);
         init();

@@ -14,7 +14,7 @@ public class AnimationApplet extends NoApplet {
     }
     public void init() {
         super.init();
-        timer = new Timer(250, e -> periodicTask());
+        timer = new Timer(500, e -> periodicTask());
     }
     public void start() {
         timer.start();

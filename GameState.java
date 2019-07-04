@@ -1,4 +1,3 @@
-package cs3331.model;
 
 /**
  * Model class from MVC. This class contains the Tretris logic but no GUI information.
@@ -11,8 +10,8 @@ public class GameState extends java.util.Observable{
     private int level;
     private int score;
     private boolean isGameActive;
-
-
+    Tetromino piece = new Tetromino();
+    Controller controller = new Controller();
     public GameState()
     {
 
@@ -46,7 +45,7 @@ public class GameState extends java.util.Observable{
      */
     public void moveTetrominoDown()
     {
-        //your code goes here
+    
     }
     public void moveTetrominoRight()
     {
