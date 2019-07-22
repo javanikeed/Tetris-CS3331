@@ -20,17 +20,20 @@ import view.animation.AnimationApplet;
 public class TetrisUI extends AnimationApplet implements Observer {
     private Color bgColor = Color.blue;
     private Color gridColor = Color.white;
-    public static TetrominoEnum curTet; // = TetrominoEnum.getRandomTetromino();
-    public static Tetromino curTetromino; // = new Tetromino(curTet);
-    
+    public static  TetrominoEnum curTet; // = TetrominoEnum.getRandomTetromino();
+    public  static Tetromino curTetromino; // = new Tetromino(curTet);
+    public char[][] board = new char[21][11];
 
-    public static int xPos;
-    public static int yPos;
+    public  int xPos = 4;
+    public  int yPos = -1;
+    public  int score = 0;
+    public  int level = 0;
+    public  int linesCleared = 0;
     
     public static TetrominoEnum nextTet;
     public static Tetromino nextTetromino; 
-    public static int x;
-	public static int y;
+    public  int x;
+	public  int y;
 
 	public TetrisUI(){
 		return;
@@ -86,18 +89,27 @@ public class TetrisUI extends AnimationApplet implements Observer {
     	g.setColor(Color.white);
         g.setFont(new Font("Helvetica", Font.PLAIN, 15));
         g.drawString("Next Tetromino: ", 350, 220);
-        g.drawString("Score: ", 350, 300);
-        g.drawString("Level: ", 350, 350);
-        g.drawString("Lines Cleared: ", 350, 400);
+        g.drawString("Score: "+ score, 350, 300);
+        g.drawString("Level: " + level, 350, 350);
+        g.drawString("Lines Cleared: "+ linesCleared, 350, 400);
     }
     
     //draws the tetromino (4 squares) onto the grid
     private void drawTetromino(Graphics g) {
         for(int i=0; i<4; i++) {
         		g.setColor(TetrisUI.getTetrominoColor(curTet));
-        		g.fillRect(((int) curTetromino.sqrCoords[i][0]+xPos)*30 -4,((int) curTetromino.sqrCoords[i][1]+yPos)*30 -4, 30, 30);
+        		g.fillRect(((int) curTetromino.sqrCoords[i][0]+xPos)*30 +26,((int) curTetromino.sqrCoords[i][1]+yPos)*30 +26, 29, 29);
         		
         	}
+    }
+    
+    private void drawCurrentBoard(Graphics g) {
+    	for( int i = 0; i < 20 ; i++) {
+    		for(int j = 0; j < 10 ; j++) {
+    			g.setColor(TetrisUI.getTetrominoColor(board[i][j]));
+    			g.fillRect(j*30 +x+1 , i*30 +y+1 , 29, 29);
+    		}
+    	}
     }
     
     //draws next tetromino in the box
@@ -107,6 +119,13 @@ public class TetrisUI extends AnimationApplet implements Observer {
         		g.fillRect(((int)nextTetromino.sqrCoords[i][0] * 30)+350, ((int)nextTetromino.sqrCoords[i][1]*30)+ 38, 30, 30);
         		
         	}
+    }
+    private void drawScore(Graphics g) {
+    	g.setColor(Color.blue); //might need to change to blue
+    	g.fillRect(395, 285, 60, 20);
+    	g.setColor(Color.white);
+    	g.setFont(new Font( "Helvetica", Font.PLAIN, 15));
+    	g.drawString(""+score, 420, 300);
     }
 	/**
 	 * 
@@ -120,7 +139,8 @@ public class TetrisUI extends AnimationApplet implements Observer {
 	 */
 	public void periodicTask()
 	{
-//		repaint();
+		repaint();
+
 	}
 	/**
 	 * Here goes what is going to drawn on screen
@@ -138,12 +158,14 @@ public class TetrisUI extends AnimationApplet implements Observer {
         
         // fill the grid
         setTetrisGrid(g);
+        drawCurrentBoard(g);
         
         //write text to UI
         setGameText(g);
+//        drawScore(g);
         
 
-        
+
         //draw current tetromino to board
         drawTetromino(g);
         drawNextTetromino(g);
@@ -158,7 +180,7 @@ public class TetrisUI extends AnimationApplet implements Observer {
 	 * @param tetrominoEnum
 	 * @return
 	 */
-	private static Color getTetrominoColor(TetrominoEnum tetrominoEnum)
+	private static  Color getTetrominoColor(TetrominoEnum tetrominoEnum)
 	{
 		Color color = null;
 		switch (tetrominoEnum)
@@ -182,6 +204,32 @@ public class TetrisUI extends AnimationApplet implements Observer {
 		}//end switch
 		return color;
 	}//end getTetrominoColor
+	
+	
+	private static  Color getTetrominoColor(char squareColor)
+	{
+		Color color = null;
+		switch (squareColor)
+		{
+		case 'I':
+			color = Color.RED; break;
+		case 'J':
+			color = Color.GREEN; break;
+		case 'L':
+			color = Color.PINK; break;
+		case 'O':
+			color  = Color.CYAN; break;
+		case 'S':
+			color = Color.MAGENTA; break;
+		case 'Z':
+			color = Color.YELLOW; break;
+		case 'T':
+			color = Color.ORANGE; break;
+		default:
+			color =  Color.WHITE; break;
+		}//end switch
+		return color;
+	}
 	/**
 	 * When there is a change on the model, the View (GUI) gets notified (this method is called)
 	 */
