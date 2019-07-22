@@ -1,3 +1,4 @@
+package model;
 /**
  * Jazmin I. Paz
  * Homework 1
@@ -15,12 +16,9 @@ import java.util.Random;
  *
  */
 public class Tetromino{
-//    public static int a=0,b=2,c=0;
-    //protected int[][] tetromino;
-//    protected int[][][] t = new int[20][10][4];
-    public double [][] sqrCoords = new double[4][2];    // stores coordinates for each square in the Tetromino 
+    public double [][] sqrCoords = new double[4][2];    // stores coordinates for each square in the Tetromino  
     public double rotationCenter;           // Indicates about which point the Tetromino Rotates.
-    public TetrominoEnum shape;
+    public TetrominoEnum shape;                     // maybe switch from using 2d array to point2d.Double ??
 
     Tetromino(){
 
@@ -37,7 +35,7 @@ public class Tetromino{
         switch(random) {
             case O:
                 //Creating O
-                sqrCoords[0][0] = 2;
+                sqrCoords[0][0] = 2; // sqr1
                 sqrCoords[0][1] = 2;
                 sqrCoords[1][0] = 3; 
                 sqrCoords[1][1] = 2; 
@@ -127,10 +125,6 @@ public class Tetromino{
      * Clears the tetromino shape and reinitializes every element
      * in array to 0 for re-use
      */
-//    public void clear_t() {
-//    	t = new int[20][10][4];
-//    }
-
 
 	/**
 	 * Returns shape
@@ -227,14 +221,14 @@ public class Tetromino{
          * @param value
          * @return
          */
-        public static TetrominoEnum getEnumByValue(int value) {
+        public static  TetrominoEnum getEnumByValue(int value) { // removed static
             return reverseLookup.get(value);
         }
         /**
          * Returns a random TetrominoEnum
          * @return
          */
-        public static TetrominoEnum getRandomTetromino() {
+        public static TetrominoEnum getRandomTetromino() { // removed static
             Random random = new Random();
             return values()[random.nextInt(values().length-1)];
         }
