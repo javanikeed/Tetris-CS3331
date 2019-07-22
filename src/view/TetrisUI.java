@@ -1,16 +1,28 @@
+
 package view;
 
 import java.awt.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
-
+import javax.swing.Timer;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JToolBar;
+import model.GameState;
 import model.Tetromino;
 import model.Tetromino.TetrominoEnum;
 import view.animation.AnimationApplet;
-
 /**
  * Creates main user interface. See AnimationApplet to see what is being inherited.
  * @author epadilla2
@@ -18,15 +30,16 @@ import view.animation.AnimationApplet;
  */
 @SuppressWarnings("serial")
 public class TetrisUI extends AnimationApplet implements Observer {
+	private ActionListener actionListener;
+	public GameState currentGame;
     private Color bgColor = Color.blue;
     private Color gridColor = Color.white;
     public static  TetrominoEnum curTet; // = TetrominoEnum.getRandomTetromino();
     public  static Tetromino curTetromino; // = new Tetromino(curTet);
     public char[][] board = new char[21][11];
-
-    public  int xPos = 4;
-    public  int yPos = -1;
-    public  int score = 0;
+    public static  int xPos = 4;
+    public static  int yPos = -1;
+    public static  int score = 0;
     public  int level = 0;
     public  int linesCleared = 0;
     
@@ -34,6 +47,7 @@ public class TetrisUI extends AnimationApplet implements Observer {
     public static Tetromino nextTetromino; 
     public  int x;
 	public  int y;
+	public boolean gamePaused = false;
 
 	public TetrisUI(){
 		return;
@@ -44,11 +58,23 @@ public class TetrisUI extends AnimationApplet implements Observer {
         dim = getSize();
         x = 25;
         y = 25;
-        
-        
-
-		
+	
 	}
+	public void start() {
+		super.start();
+		repaint();
+		this.gamePaused = false;
+	}
+	public void stop() {
+		super.stop();
+		repaint();
+		this.gamePaused  = true;
+	}
+	
+	public boolean gamePaused() {
+		return this.gamePaused();
+	}
+	
 
     //sets background to blue and to the default size
     private void setBackground(Graphics g) {
@@ -139,6 +165,7 @@ public class TetrisUI extends AnimationApplet implements Observer {
 	 */
 	public void periodicTask()
 	{
+		
 		repaint();
 
 	}
@@ -237,4 +264,79 @@ public class TetrisUI extends AnimationApplet implements Observer {
 	{
 
 	}
-}//end TetrisUI class
+	/**Initializes the menu bar */
+	public JPanel createUI() { 
+	    JPanel home = new JPanel();
+	    home.setLayout(new BorderLayout());
+	    home.add(this, "Center");
+	    home.add(newMenuBar(), "North");
+	    home.add(newToolBar(), "South");
+	    return home;
+	} 
+	/** Creates menu bar that displays new game, controls, how to play and exit.*/  
+	public JMenuBar newMenuBar() {
+	    JMenuBar menuBar = new JMenuBar();
+	    JMenu menuButton = new JMenu("Game");
+	    JMenuItem newGameMenu = new JMenuItem("Begin New Game");
+	    newGameMenu.setBackground(Color.WHITE);
+	    newGameMenu.setForeground(Color.BLACK);
+	    newGameMenu.addActionListener(this.actionListener);
+	    JMenuItem instructionsMenu = new JMenuItem("Game Controls");
+	    instructionsMenu.setBackground(Color.WHITE);
+	    instructionsMenu.setForeground(Color.BLACK);
+	    instructionsMenu.addActionListener((ActionListener) new ActionListener(){public void actionPerformed(ActionEvent e){
+	            JDialog instructions = new JDialog();
+	            instructions.setTitle("Tetris Control Keys to Play");
+	            instructions.setSize(320, 135); //sets dimensions of instructions box
+	            JTextArea instructionsText = new JTextArea(
+	            		"Left Arrow Key: Move block to the left.\n" 
+	            		+ "Right Arrow Key: Move block to the right.\n"
+	            		+ "Down Arrow Key: Move block down.\n"
+	            		+"\"Z\" Key: Rotate block counterclockwise.\n"
+	            		+  "\"C\" Key: Rotate block clockwise.\n"
+	            		+ "Esc Key: Pause/Unpause the game.\n");
+	            instructionsText.setBackground(Color.WHITE);
+	            instructionsText.setForeground(Color.BLACK);
+	            instructionsText.setFont(new Font( "Helvetica", Font.PLAIN, 14));
+	            instructions.add(new JScrollPane(instructionsText));
+	            instructions.setVisible(true);
+	          }});
+	    JMenuItem howToPlay = new JMenuItem("How to Play");
+	    howToPlay.setBackground(Color.WHITE);
+	    howToPlay.setForeground(Color.BLACK);
+	    howToPlay.addActionListener((ActionListener) new ActionListener(){public void actionPerformed(ActionEvent e){
+            JDialog howToPlayInstructions = new JDialog();
+            howToPlayInstructions.setTitle("Instruction Manual");
+            howToPlayInstructions.setSize(330, 140); //sets dimensions of instructions box
+            JTextArea howToPlayInstructionsText = new JTextArea(
+            		"Goal of the game is to make full horizontal lines \n" 
+            		+ "with different shaped tetrominos that fall into \n"
+            		+ "the game area. Full lines disappear and provide\n"
+            		+" points. The more lines you make, the more points\n"
+            		+ "you earn. When tetrominos reach the top of the\n"
+            		+ "board, the game is over and you lose.\n");
+            howToPlayInstructionsText.setBackground(Color.WHITE);
+            howToPlayInstructionsText.setForeground(Color.BLACK);
+            howToPlayInstructionsText.setFont(new Font( "Helvetica", Font.PLAIN, 14));
+            howToPlayInstructions.add(new JScrollPane(howToPlayInstructionsText));
+            howToPlayInstructions.setVisible(true);
+          }});
+	    
+	    JMenuItem exit = new JMenuItem("Exit");
+	    exit.setBackground(Color.WHITE);
+	    exit.setForeground(Color.BLACK);
+	    
+	    menuButton.add(newGameMenu);
+	    menuButton.add(instructionsMenu);
+	    menuButton.add(howToPlay);
+	    menuButton.add(exit);
+	    
+	    menuBar.add(menuButton);
+	    return menuBar;
+	}
+	public JToolBar newToolBar() {
+		JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
+		return toolBar;
+	}
+}
+	
