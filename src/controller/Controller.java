@@ -4,6 +4,7 @@ package controller;
  */
 
 import model.*;
+import model.Tetromino.TetrominoEnum;
 import view.*;
 
 
@@ -53,10 +54,18 @@ public class Controller implements KeyListener {
 		//pause
 		if  (keyCode == KeyEvent.VK_ESCAPE)
 		{
-			//your code goes here
+			System.out.println("Game Paused. (gets stuck/needs fixing)");
+			if (curUi.gamePaused == true) {
+				curUi.start();
+			}
+			if (curUi.gamePaused == false) {
+				curUi.stop();
+			}
+			
 			return;
 		}
 		
+	if(curUi.gamePaused == false){
 		switch(keyCode) 
 		{ 
         case KeyEvent.VK_DOWN:
@@ -64,16 +73,13 @@ public class Controller implements KeyListener {
         	if(!curGame.validatePosition()) {
         		curGame.moveTetrominoUp();
         		curGame.collision();
-//        		curUi.board = curGame.board;
-        		curGame.currentTetromino = curUi.nextTetromino; // maybe change how this information is exchanged
-        		curUi.curTet = curUi.nextTet;
+        		curGame.currentTetromino = TetrisUI.nextTetromino; // maybe change how this information is exchanged
+        		TetrisUI.curTet = curUi.nextTet;
         		if(!curGame.validatePosition()) {
         			//game ends
         		}
-//        		curUi.xPos = curGame.currentXCord;
-//        		curUi.yPos = curGame.currentYCord;
-        		curUi.nextTet = curUi.curTet.getRandomTetromino();
-        		curUi.nextTetromino = new Tetromino(curUi.nextTet);
+        		TetrisUI.nextTet = TetrominoEnum.getRandomTetromino();
+        		TetrisUI.nextTetromino = new Tetromino(TetrisUI.nextTet);
         		
         	}
         	updateUi();
@@ -110,6 +116,7 @@ public class Controller implements KeyListener {
 		default:
 			break;
 		}
+	}
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
