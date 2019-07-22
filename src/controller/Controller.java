@@ -25,6 +25,7 @@ public class Controller implements KeyListener {
 		curGame.board_init();
 		curUi = new TetrisUI() ;
 		curUi.init();
+		curUi.board = curGame.board;
 		curUi.curTet = curGame.currentType;
 		curUi.curTetromino = curGame.currentTetromino;
 		curUi.xPos = curGame.currentXCord;
@@ -34,10 +35,13 @@ public class Controller implements KeyListener {
 		return;
 	}
 	public void updateUi() {
-//		curUi.curTet = curGame.currentType;
 		curUi.curTetromino = curGame.currentTetromino;
 		curUi.xPos = curGame.currentXCord;
 		curUi.yPos = curGame.currentYCord;
+		curUi.score = curGame.getScore();
+		curUi.level = curGame.getLevel();
+		curUi.linesCleared = curGame.getTotalLinesCleared();
+		curUi.board = curGame.board;
 	}
 	/**
 	 * Defines action when a key is pressed
@@ -52,26 +56,57 @@ public class Controller implements KeyListener {
 			//your code goes here
 			return;
 		}
-
+		
 		switch(keyCode) 
 		{ 
         case KeyEvent.VK_DOWN:
         	curGame.moveTetrominoDown();
+        	if(!curGame.validatePosition()) {
+        		curGame.moveTetrominoUp();
+        		curGame.collision();
+//        		curUi.board = curGame.board;
+        		curGame.currentTetromino = curUi.nextTetromino; // maybe change how this information is exchanged
+        		curUi.curTet = curUi.nextTet;
+        		if(!curGame.validatePosition()) {
+        			//game ends
+        		}
+//        		curUi.xPos = curGame.currentXCord;
+//        		curUi.yPos = curGame.currentYCord;
+        		curUi.nextTet = curUi.curTet.getRandomTetromino();
+        		curUi.nextTetromino = new Tetromino(curUi.nextTet);
+        		
+        	}
         	updateUi();
         	curGame.setScore(curGame.getScore()+5);
             break;
         case KeyEvent.VK_LEFT:
-        	curGame.moveTetrominoLeft();
+    		curGame.moveTetrominoLeft();
+        	if(!curGame.validatePosition()) {
+        		curGame.moveTetrominoRight();
+        	}
+        	updateUi();
             break;
         case KeyEvent.VK_RIGHT :
         	curGame.moveTetrominoRight();
+        	if(!curGame.validatePosition()) {
+        		curGame.moveTetrominoLeft();
+        	}
+        	updateUi();
             break;
         case KeyEvent.VK_Z:
         	curGame.currentTetromino.rotateLeft();
+        	if(!curGame.validatePosition()) {
+        		curGame.currentTetromino.rotateRight();
+        	}
+        	updateUi();
             break;
         case KeyEvent.VK_C:
         	curGame.currentTetromino.rotateRight();
-            break;
+        	if(!curGame.validatePosition()) {
+        		curGame.currentTetromino.rotateLeft();
+        	}
+        	updateUi();
+        	break;
 		default:
 			break;
 		}
