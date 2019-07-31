@@ -1,26 +1,15 @@
-/**
- * TetrisUI class.
- * @author Emilio Ramirez
- * @author Jazmin I. Paz
- * @version 1.2
- * @since 2019-07-21
- *
- */
-
-
-
 package view;
 
+
 import java.awt.*;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.Color;	
+import java.awt.Font;	
+import java.awt.Graphics;	
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
-import javax.swing.Timer;
-import javax.swing.JButton;
+import java.awt.event.KeyEvent;
+import java.util.Observable;	
+import java.util.Observer;	
 import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -29,86 +18,90 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyListener;
+import javax.swing.JOptionPane;
 import model.GameState;
-import model.Tetromino;
-import model.Tetromino.TetrominoEnum;
+import model.Tetromino;	
+import model.Tetromino.TetrominoEnum;	
 import view.animation.AnimationApplet;
+import view.NetworkDialog;
+import javax.swing.Timer;
+import javax.swing.ImageIcon;
+
 /**
  * Creates main user interface. See AnimationApplet to see what is being inherited.
  * @author epadilla2
  *
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "deprecation" })
 public class TetrisUI extends AnimationApplet implements Observer {
-	private ActionListener actionListener;
-	public GameState currentGame;
     private Color bgColor = Color.blue;
     private Color gridColor = Color.white;
-    public GameState game;
-    public static  TetrominoEnum curTet; // = TetrominoEnum.getRandomTetromino();
-    public  static Tetromino curTetromino; // = new Tetromino(curTet);
-    public char[][] board = new char[21][11];
-    public static  int xPos = 4;
-    public static  int yPos = -1;
-    public static  int score = 0;
-    public  int level = 0;
+    public static  TetrominoEnum curTet; 
+    public  static Tetromino curTetromino; 
+	public ActionListener actionListener;
+	public NetworkDialog network;
+    public  int xPos = 2;
+    public  int yPos = -2;
+    public  int score = 0;
+    public  int level = 1;
     public  int linesCleared = 0;
-    
     public static TetrominoEnum nextTet;
     public static Tetromino nextTetromino; 
     public  int x;
 	public  int y;
 	public boolean gamePaused = false;
-	
+	public String numPlayers;
+	public JMenuItem newGameMenu;
 
-	public TetrisUI(){
-		return;
-	}
 	public void init() {
         super.init();
-        start();
+        timer.setDelay(500);
+        //start();
+        timer.stop();
         dim = getSize();
         x = 25;
         y = 25;
-        
 	
 	}
 	
-	/**start timer*/
 	public void start() {
-		super.start();
-		repaint();
+		timer.start();
+ 		//super.start();
+		//repaint();
 		this.gamePaused = false;
 	}
-	/**stop timer */
-	public void stop() {
-		super.stop();
-		repaint();
-		this.gamePaused  = true;
-	}
-	/** checks if game is paused or not
-	 * @return boolean
-	 * */
-	public boolean gamePaused() {
-		return this.gamePaused();
-	}
 	
+	public void stop() {
+		timer.stop();
+		//super.stop();
+		//repaint();
+		gamePaused  = true;
+	}
 
-    /**sets background to blue and to the default size */
+ 	public boolean gamePaused() {
+		return this.gamePaused();
+	}		
+
+
+    
     private void setBackground(Graphics g) {
     	g.setColor(bgColor);
     	g.fillRect(0, 0, dim.width, dim.height);
+    	g.drawImage(getImage(getCodeBase(), "image/wallpaper.png"),   0, 0, this);
+
     }
     
-    /**draws the window where next tetromino will be displayed */
+    //draws the window where next tetromino will be displayed
     private void setNextTetrominoWindow(Graphics g) {
-    	g.setColor(Color.white);
+    	g.setColor(Color.black);
     	g.drawRect(350, 40, 175, 150);
     }
     
-    /**creates the 20x10 grid with dimensions 600x300. */
+    //creates the 20x10 grid with dimensions 600x300.
     private void drawGrid(Graphics g, int x, int y){
-        g.setColor(Color.blue);
+    	g.setColor(Color.black);
         int reset_x = x;
         for(int i=0;i<11;i++){
             g.fillRect(x, y, 1, 600);
@@ -121,57 +114,48 @@ public class TetrisUI extends AnimationApplet implements Observer {
         }
     }
     
-    /**sets it onto the background */
+    //sets it onto the background
     private void setTetrisGrid(Graphics g) {
     	g.setColor(gridColor);
         g.fillRect(x, y, 300, 600);
         drawGrid(g, x, y);
     }
     
-    /**sets lines, score and level, also "next tetromino" text */
+    //sets lines, score and level, also "next tetromino" text
     private void setGameText(Graphics g) {
     	g.setColor(Color.white);
-        g.setFont(new Font("Helvetica", Font.PLAIN, 15));
+        g.setFont(new Font("Dialog", Font.PLAIN, 20));
         g.drawString("Next Tetromino: ", 350, 220);
         g.drawString("Score: "+ score, 350, 300);
         g.drawString("Level: " + level, 350, 350);
         g.drawString("Lines Cleared: "+ linesCleared, 350, 400);
     }
     
-    /**draws the tetromino (4 squares) onto the grid */
+    //draws the tetromino (4 squares) onto the grid
     private void drawTetromino(Graphics g) {
         for(int i=0; i<4; i++) {
         		g.setColor(TetrisUI.getTetrominoColor(curTet));
-        		g.fillRect(((int) curTetromino.sqrCoords[i][0]+xPos)*30 +26,((int) curTetromino.sqrCoords[i][1]+yPos)*30 +26, 29, 29);
+        		g.fillRect(((int) curTetromino.sqrCoords[i][0]+xPos)*30 +26,((int) curTetromino.sqrCoords[i][1]+GameState.currentYCord)*30 +26, 29, 29);
         		
         	}
     }
     
-    /** draws current board*/
     private void drawCurrentBoard(Graphics g) {
     	for( int i = 0; i < 20 ; i++) {
     		for(int j = 0; j < 10 ; j++) {
-    			g.setColor(TetrisUI.getTetrominoColor(board[i][j]));
+    			g.setColor(TetrisUI.getTetrominoColor(GameState.board[i][j]));
     			g.fillRect(j*30 +x+1 , i*30 +y+1 , 29, 29);
     		}
     	}
     }
     
-    /**draws next tetromino in the box */
+    //draws next tetromino in the box
     private void drawNextTetromino(Graphics g) {
         for(int i=0; i<4; i++) {
         		g.setColor(TetrisUI.getTetrominoColor(nextTet));
         		g.fillRect(((int)nextTetromino.sqrCoords[i][0] * 30)+350, ((int)nextTetromino.sqrCoords[i][1]*30)+ 38, 30, 30);
         		
         	}
-    }
-    /** draws score*/
-    private void drawScore(Graphics g) {
-    	g.setColor(Color.blue); //might need to change to blue
-    	g.fillRect(395, 285, 60, 20);
-    	g.setColor(Color.white);
-    	g.setFont(new Font( "Helvetica", Font.PLAIN, 15));
-    	g.drawString(""+score, 420, 300);
     }
 	/**
 	 * 
@@ -185,8 +169,9 @@ public class TetrisUI extends AnimationApplet implements Observer {
 	 */
 	public void periodicTask()
 	{
-		
+
 		repaint();
+		GameState.moveTetrominoDown();
 
 	}
 	/**
@@ -209,7 +194,6 @@ public class TetrisUI extends AnimationApplet implements Observer {
         
         //write text to UI
         setGameText(g);
-//        drawScore(g);
         
 
 
@@ -233,19 +217,19 @@ public class TetrisUI extends AnimationApplet implements Observer {
 		switch (tetrominoEnum)
 		{
 		case I:
-			color = Color.RED; break;
+			color = new Color(44,76,54); break;
 		case J:
-			color = Color.GREEN; break;
+			color = new Color(26,52,59); break;
 		case L:
-			color = Color.PINK; break;
+			color = new Color(118,140,118); break;
 		case O:
-			color  = Color.CYAN; break;
+			color  = new Color(191,219,221); break;
 		case S:
-			color = Color.MAGENTA; break;
+			color = new Color(197,234,224); break;
 		case Z:
-			color = Color.YELLOW; break;
+			color = new Color(83,92,95); break;
 		case T:
-			color = Color.ORANGE; break;
+			color = new Color(162,195,162); break;
 		default:
 			color =  Color.WHITE; break;
 		}//end switch
@@ -259,30 +243,31 @@ public class TetrisUI extends AnimationApplet implements Observer {
 		switch (squareColor)
 		{
 		case 'I':
-			color = Color.RED; break;
+			color = new Color(44,76,54); break;
 		case 'J':
-			color = Color.GREEN; break;
+			color = new Color(26,52,59); break;
 		case 'L':
-			color = Color.PINK; break;
+			color = new Color(118,140,118); break;
 		case 'O':
-			color  = Color.CYAN; break;
+			color  = new Color(191,219,221); break;
 		case 'S':
-			color = Color.MAGENTA; break;
+			color = new Color(197,234,224); break;
 		case 'Z':
-			color = Color.YELLOW; break;
+			color = new Color(83,92,95); break;
 		case 'T':
-			color = Color.ORANGE; break;
+			color = new Color(162,195,162); break;
 		default:
 			color =  Color.WHITE; break;
 		}//end switch
 		return color;
+
 	}
 	/**
 	 * When there is a change on the model, the View (GUI) gets notified (this method is called)
 	 */
 	public void update(Observable obs, Object obj)
 	{
-
+		yPos = GameState.currentYCord;
 	}
 	/**Initializes the menu bar */
 	public JPanel createUI() { 
@@ -297,13 +282,61 @@ public class TetrisUI extends AnimationApplet implements Observer {
 	public JMenuBar newMenuBar() {
 	    JMenuBar menuBar = new JMenuBar();
 	    JMenu menuButton = new JMenu("Game");
+	    menuButton.setMnemonic(KeyEvent.VK_M);
+	    
+	    
+	    
 	    JMenuItem newGameMenu = new JMenuItem("Begin New Game");
 	    newGameMenu.setBackground(Color.WHITE);
 	    newGameMenu.setForeground(Color.BLACK);
-	    newGameMenu.addActionListener(this.actionListener);
+	    ImageIcon newIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/new.png"));
+	    newGameMenu.setIcon(newIcon);
+	    newGameMenu.addActionListener(actionListener);
+	    KeyStroke newGameAccelerator = KeyStroke.getKeyStroke("control W");
+	    newGameMenu.setAccelerator(newGameAccelerator);
+	    
+	    
 	    JMenuItem instructionsMenu = new JMenuItem("Game Controls");
 	    instructionsMenu.setBackground(Color.WHITE);
 	    instructionsMenu.setForeground(Color.BLACK);
+	    ImageIcon controllerIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/controller.png"));
+	    instructionsMenu.setIcon(controllerIcon);
+	    KeyStroke instructionAccelerator = KeyStroke.getKeyStroke("control Q");
+        instructionsMenu.setAccelerator(instructionAccelerator);
+	    
+	    
+	    JMenuItem howToPlay = new JMenuItem("How to Play");
+	    howToPlay.setBackground(Color.WHITE);
+	    howToPlay.setForeground(Color.BLACK);
+	    ImageIcon scrollIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/scroll.png"));
+	    howToPlay.setIcon(scrollIcon);
+	    KeyStroke howToPlayAccelerator = KeyStroke.getKeyStroke("control R");
+	    howToPlay.setAccelerator(howToPlayAccelerator);
+	    
+	    JMenuItem exit = new JMenuItem("Exit");
+	    exit.setBackground(Color.WHITE);
+	    exit.setForeground(Color.BLACK);
+	    ImageIcon doorIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/door.png"));
+	    exit.setIcon(doorIcon);
+	    exit.addActionListener(this::exitGame);
+	    KeyStroke exitAccelerator = KeyStroke.getKeyStroke("control E");
+	    exit.setAccelerator(exitAccelerator);
+	   
+	    
+	    
+	    /*newGameMenu.addActionListener((ActionListener) new ActionListener(){public void actionPerformed(ActionEvent e){
+	    	numPlayers = InputDialogWithDropdownListbox();
+	    	if (numPlayers.equalsIgnoreCase("Singleplayer")){
+	    		timer.start();
+	    	}
+	    	else {
+	    		return;
+	    	}
+	    	
+          }}); */
+	    
+	    
+	    
 	    instructionsMenu.addActionListener((ActionListener) new ActionListener(){public void actionPerformed(ActionEvent e){
 	            JDialog instructions = new JDialog();
 	            instructions.setTitle("Tetris Control Keys to Play");
@@ -319,11 +352,13 @@ public class TetrisUI extends AnimationApplet implements Observer {
 	            instructionsText.setForeground(Color.BLACK);
 	            instructionsText.setFont(new Font( "Helvetica", Font.PLAIN, 14));
 	            instructions.add(new JScrollPane(instructionsText));
-	            instructions.setVisible(true);
-	          }});
-	    JMenuItem howToPlay = new JMenuItem("How to Play");
-	    howToPlay.setBackground(Color.WHITE);
-	    howToPlay.setForeground(Color.BLACK);
+	            instructions.setVisible(true); 
+	            
+	            
+	    }});
+	    
+	    
+
 	    howToPlay.addActionListener((ActionListener) new ActionListener(){public void actionPerformed(ActionEvent e){
             JDialog howToPlayInstructions = new JDialog();
             howToPlayInstructions.setTitle("Instruction Manual");
@@ -340,26 +375,46 @@ public class TetrisUI extends AnimationApplet implements Observer {
             howToPlayInstructionsText.setFont(new Font( "Helvetica", Font.PLAIN, 14));
             howToPlayInstructions.add(new JScrollPane(howToPlayInstructionsText));
             howToPlayInstructions.setVisible(true);
-          }});
-	    
-	    JMenuItem exit = new JMenuItem("Exit");
-	    exit.setBackground(Color.WHITE);
-	    exit.setForeground(Color.BLACK);
-	    
-	    menuButton.add(newGameMenu);
+        }});
+
+ 	    
+
+ 	    menuButton.add(newGameMenu);
 	    menuButton.add(instructionsMenu);
 	    menuButton.add(howToPlay);
 	    menuButton.add(exit);
 	    
-	    menuBar.add(menuButton);
+ 	    menuBar.add(menuButton);
+ 	    
+ 	    
 	    return menuBar;
+	    
 	}
+	
+	
 	public JToolBar newToolBar() {
 		JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
 		return toolBar;
 	}
-}
 	
-	  }
-
+	
+	protected void exitGame(ActionEvent e) {
+		System.exit(0);
+	}
+	
+	
+	/*public String InputDialogWithDropdownListbox() {
+		String[] choices = { "Singleplayer", "Mulitplayer"};
+	    String input = (String) JOptionPane.showInputDialog(null, "Please choose number of players:", "Players", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]); 
+	    //System.out.println(input);
+	    return input;
+	}  */
+	
+	public void resetTimer() {
+		this.timer = new Timer(this.delay, e -> periodicTask()); 
+	}
+	
+	
+	public void setActionListener(ActionListener controller) { this.actionListener = controller; }
+	
 }

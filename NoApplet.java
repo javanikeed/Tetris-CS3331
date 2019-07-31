@@ -1,3 +1,5 @@
+package view.animation;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -79,7 +81,7 @@ public class NoApplet extends DoubleBufferPanel {
 
     /** Called after an instance is created. */
     public void init() {
-        super.init();
+    	super.init();
     }
 
     /** Called when the start button is clicked. */
@@ -283,11 +285,11 @@ public class NoApplet extends DoubleBufferPanel {
         root.add(statusBar, BorderLayout.SOUTH);
         return root;
     }
-
-    public KeyListener getKeyListener()
-    {
-        return null;
-    }
+    
+	public KeyListener getKeyListener()
+	{
+		return null;
+	}
 
     /** Show this NoApplet in a Swing Jframe with control buttons. */
     public void run() {
@@ -296,20 +298,20 @@ public class NoApplet extends DoubleBufferPanel {
         frame.addKeyListener(getKeyListener());
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Tetris");
+        frame.setTitle(getClass().getSimpleName());
         frame.setResizable(false);
         frame.setVisible(true);
         init();
     }
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
         new NoApplet(args).run();
     }
 
-    @Override
-    protected void paintFrame(Graphics g) {
-        g.setColor(Color.GRAY);
-        g.drawRect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
-    }
+	@Override
+	protected void paintFrame(Graphics g) {
+		g.setColor(Color.GRAY);
+		g.drawRect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		
+	}
 }

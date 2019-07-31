@@ -1,53 +1,62 @@
-/**
- * Controller class.
- * @author Emilio Ramirez
- * @author Jazmin I. Paz
- * @version 1.2
- * @since 2019-07-21
- */
 package controller;
+/**
+ * 
+ */
 
-import model.*;
+
+
+import model.GameState;
+import model.NetworkAdapter;
+import model.NetworkMessageListener;
+import model.Tetromino;
 import model.Tetromino.TetrominoEnum;
-import view.*;
-
-
+import view.TetrisUI;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URL;
+import javax.swing.JOptionPane;
 
 /**
  * Manages all events between View (GUI) and Model (Game State)
  * @author epadilla2
  *
  */
+
 public class Controller implements KeyListener {
-	public GameState curGame;
-	public TetrisUI curUi;
+	public static GameState currentGame;
+	public TetrisUI currentUI;
+	public GameState gameState;
 	public Controller(){
 	}
 	public  void init() { // need to create new instance of both view and game state
-		curGame = new GameState();
-		curGame.board_init();
-		curUi = new TetrisUI() ;
-		curUi.init();
-		curUi.board = curGame.board;
-		curUi.curTet = curGame.currentType;
-		curUi.curTetromino = curGame.currentTetromino;
-		curUi.xPos = curGame.currentXCord;
-		curUi.yPos = curGame.currentYCord;
-		curUi.nextTet = curUi.curTet.getRandomTetromino();
-		curUi.nextTetromino = new Tetromino(curUi.nextTet);
+		currentGame = new GameState();
+		currentGame.board_init();
+		TetrisUI.curTet = currentGame.currentType;
+		TetrisUI.curTetromino = currentGame.currentTetromino;
+		currentUI.xPos = currentGame.currentXCord;
+		TetrisUI.nextTet = currentGame.nextType;
+		TetrisUI.nextTetromino = currentGame.nextTetromino;
 		return;
 	}
-	/**updates UI*/
 	public void updateUi() {
-		curUi.curTetromino = curGame.currentTetromino;
-		curUi.xPos = curGame.currentXCord;
-		curUi.yPos = curGame.currentYCord;
-		curUi.score = curGame.getScore();
-		curUi.level = curGame.getLevel();
-		curUi.linesCleared = curGame.getTotalLinesCleared();
-		curUi.board = curGame.board;
+		TetrisUI.curTetromino = currentGame.currentTetromino;
+		TetrisUI.curTet = currentGame.currentType;
+		currentUI.xPos = currentGame.currentXCord;
+//		curUi.yPos = curGame.currentYCord;
+		currentUI.score = currentGame.getScore();
+		currentUI.level = currentGame.getLevel();
+		currentUI.linesCleared = currentGame.getTotalLinesCleared();
+//		curUi.board = curGame.board;
+		currentUI.repaint();
 	}
 	/**
 	 * Defines action when a key is pressed
@@ -56,65 +65,58 @@ public class Controller implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		
-		//pause
 		if  (keyCode == KeyEvent.VK_ESCAPE)
 		{
-			System.out.println("Game Paused. (gets stuck/needs fixing)");
-			if (curUi.gamePaused == true) {
-				curUi.start();
-			}
-			if (curUi.gamePaused == false) {
-				curUi.stop();
-			}
-			
+			/*if (currentUI.gamePaused() == true)
+				currentUI.stop();
+			else
+				currentUI.start(); */
 			return;
+			
 		}
 		
-	if(curUi.gamePaused == false){
 		switch(keyCode) 
 		{ 
         case KeyEvent.VK_DOWN:
-        	curGame.moveTetrominoDown();
-        	if(!curGame.validatePosition()) {
-        		curGame.moveTetrominoUp();
-        		curGame.collision();
-        		curGame.currentTetromino = TetrisUI.nextTetromino; // maybe change how this information is exchanged
-        		TetrisUI.curTet = curUi.nextTet;
-        		if(!curGame.validatePosition()) {
-        			//game ends
+        	GameState.moveTetrominoDown();
+        	if(!currentGame.validatePosition()) {
+        		currentGame.moveTetrominoUp();
+        		currentGame.collision();
+        		if(!currentGame.validatePosition()) {
+        			currentGame.setIsGameActive(false);
         		}
-        		TetrisUI.nextTet = TetrominoEnum.getRandomTetromino();
-        		TetrisUI.nextTetromino = new Tetromino(TetrisUI.nextTet);
+        		TetrisUI.nextTet = currentGame.nextType;
+        		TetrisUI.nextTetromino = currentGame.nextTetromino;
         		
         	}
         	updateUi();
-        	curGame.setScore(curGame.getScore()+5);
+        	currentGame.setScore(currentGame.getScore()+5);
             break;
         case KeyEvent.VK_LEFT:
-    		curGame.moveTetrominoLeft();
-        	if(!curGame.validatePosition()) {
-        		curGame.moveTetrominoRight();
+    		currentGame.moveTetrominoLeft();
+        	if(!currentGame.validatePosition()) {
+        		currentGame.moveTetrominoRight();
         	}
         	updateUi();
             break;
         case KeyEvent.VK_RIGHT :
-        	curGame.moveTetrominoRight();
-        	if(!curGame.validatePosition()) {
-        		curGame.moveTetrominoLeft();
+        	currentGame.moveTetrominoRight();
+        	if(!currentGame.validatePosition()) {
+        		currentGame.moveTetrominoLeft();
         	}
         	updateUi();
             break;
         case KeyEvent.VK_Z:
-        	curGame.currentTetromino.rotateLeft();
-        	if(!curGame.validatePosition()) {
-        		curGame.currentTetromino.rotateRight();
+        	currentGame.currentTetromino.rotateLeft();
+        	if(!currentGame.validatePosition()) {
+        		currentGame.currentTetromino.rotateRight();
         	}
         	updateUi();
             break;
         case KeyEvent.VK_C:
-        	curGame.currentTetromino.rotateRight();
-        	if(!curGame.validatePosition()) {
-        		curGame.currentTetromino.rotateLeft();
+        	currentGame.currentTetromino.rotateRight();
+        	if(!currentGame.validatePosition()) {
+        		currentGame.currentTetromino.rotateLeft();
         	}
         	updateUi();
         	break;
@@ -122,7 +124,57 @@ public class Controller implements KeyListener {
 			break;
 		}
 	}
-	}
+	
+	public void actionPerformed(ActionEvent e) {
+	    if (e.getSource() instanceof javax.swing.JMenuBar)
+	    {
+	      newGameClicked();
+	      System.out.println("This works");
+	    }
+	    
+	   /* if (e.getSource() == currentUI.network.hostButton){
+	      hostClicked();
+	    }
+	    if (e.getSource() == currentUI.network.connectButton) {
+	      connectClicked();
+	    } */
+	  }
+	
+	
+	private void newGameClicked() {
+	    this.currentUI.stop();
+	    String[] choices = { "Singleplayer", "Mulitplayer"};
+	    String numPlayers = (String) JOptionPane.showInputDialog(null, "Please choose number of players:", "Players",
+	    		JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]); 
+	    //System.out.println(input);
+	    
+	    
+	    if (numPlayers == null) {
+	      return;
+	    }
+	    if ("Singleplayer".equals(numPlayers)) {
+	      
+	      this.gameState.singleplayerGame();
+	      this.currentUI.resetTimer();
+	      this.currentUI.start();
+	    
+	    }
+	    else {
+	      
+	      String name = this.gameState.playerName;
+	      name = (name == null) ? "" : name;
+	      while ("".equals(name))
+	        name = JOptionPane.showInputDialog(null, "What's your name?", "Player Name", 1); 
+	      if (name == null)
+	        return; 
+	      this.gameState.playerName = name;
+	      //this.currentUI.setModel(this.gameState);
+	      this.currentUI.network.setVisible(true);
+	    } 
+	  }
+	
+	
+	
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
